@@ -3,25 +3,32 @@ import Web3 from 'web3';
 // Connect to the local Hardhat network
 const web3 = new Web3("http://127.0.0.1:8545");
 
-// Get the list of transactions for an account
 const getTransactionsByAddress = async (accountAddress, startBlock = 0, endBlock = 'latest') => {
     try {
         const latestBlock = await web3.eth.getBlockNumber();
         console.log(`Latest Block: ${latestBlock}`);
-        //add the transaction into json
+
+        if (endBlock === 'latest') {
+            endBlock = latestBlock;
+        }
+
         let transactions = [];
-        for (let i = startBlock; i <= latestBlock; i++) {
+        for (let i = startBlock; i <= endBlock; i++) {
             const block = await web3.eth.getBlock(i, true);
             if (block !== null && block.transactions !== null) {
                 block.transactions.forEach(transaction => {
                     if (accountAddress === transaction.from || accountAddress === transaction.to) {
-                        // push the transaction hash, from, to, value, and block number, gas used to the array
+                        const date = new Date(Number(block.timestamp) * 1000); // Convert to milliseconds
+                        const formattedDate = date.toISOString().replace('T', ' ').substring(0, 19); // Format to 24-hour datetime
+
                         transactions.push({
                             hash: transaction.hash,
                             from: transaction.from,
                             to: transaction.to,
-                            value: web3.utils.fromWei(transaction.value, 'ether'),
-                            blockNumber: transaction.blockNumber,
+                            value: web3.utils.fromWei(transaction.value.toString(), 'ether'), 
+                            blockNumber: Number(transaction.blockNumber), 
+                            gasUsed: Number(transaction.gas), 
+                            timestamp: formattedDate,
                         });
                     }
                 });
@@ -29,7 +36,8 @@ const getTransactionsByAddress = async (accountAddress, startBlock = 0, endBlock
         }
         return transactions;
     } catch (error) {
-        console.log('Error:', error);
+        console.error(`Error fetching transactions: ${error}`);
+        throw error;
     }
 };
 
@@ -76,4 +84,28 @@ const convertBigIntToString = (obj) => {
     }
 };
 
-export { getTransactionsByAddress, sendEther, getBalance, convertBigIntToString };
+const getHourlyTransactionWithCount = async (transactions) => {
+    const grouped = {}; 
+
+  transactions.forEach((transaction) => {
+    const date = new Date(transaction.timestamp); 
+    const day = date.toISOString().split('T')[0]; 
+
+    if (!grouped[day]) {
+      grouped[day] = []; 
+    }
+
+    grouped[day].push(transaction.hash); 
+  });
+
+  const result = {
+    dates: Object.keys(grouped),
+    transactions: Object.values(grouped)
+  };
+
+  return result;
+}
+
+export { getTransactionsByAddress, sendEther, getBalance, convertBigIntToString,
+    getHourlyTransactionWithCount
+ };

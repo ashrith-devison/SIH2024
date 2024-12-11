@@ -1,5 +1,5 @@
 import express from 'express';
-
+import cors from 'cors';
 import Web3 from 'web3';
 const web3 = new Web3("http://127.0.0.1:8545");
 
@@ -15,7 +15,12 @@ const testConnection = async () => {
 };
 
 const app = express();
+app.use(cors({
+  origin : '*',
+}))
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 testConnection().then((resp) => {
   if (resp) {
