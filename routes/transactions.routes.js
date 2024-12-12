@@ -118,6 +118,13 @@ router.get('/ml/level3/:ip', async (req, res) => {
     res.send(result);
 });
 
+import { getTransaction, getDailyTransactionsWithCount } from '../controllers/funds.controller.js';
+router.get('/history/l4/:user1/:user2', async (req, res) => {
+    const { user1, user2 } = req.params;
+    const result = await getTransaction(user1, user2);
+    res.send({result});
+});
+
 router.get('/checks/:hash/:sender/:receiver', async (req, res) => {
     const { hash, sender, receiver } = req.params;    
     const resHash = await axios.get(`${process.env.BACKEND_URL}/api/spam/${hash}`);

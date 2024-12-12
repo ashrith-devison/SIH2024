@@ -18,8 +18,8 @@ const getTransactionsByAddress = async (accountAddress, startBlock = 0, endBlock
             if (block !== null && block.transactions !== null) {
                 block.transactions.forEach(transaction => {
                     if (accountAddress === transaction.from || accountAddress === transaction.to) {
-                        const date = new Date(Number(block.timestamp) * 1000); // Convert to milliseconds
-                        const formattedDate = date.toISOString().replace('T', ' ').substring(0, 19); // Format to 24-hour datetime
+                        const date = new Date(Number(block.timestamp) * 1000); 
+                        const formattedDate = date.toISOString().replace('T', ' ').substring(0, 19); 
 
                         transactions.push({
                             hash: transaction.hash,
