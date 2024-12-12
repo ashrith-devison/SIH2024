@@ -20,6 +20,7 @@ contracts
 ignition
 test
 Hardhat.config.cjs
+<<<<<<< HEAD
 
 node_modules
 .env
@@ -56,3 +57,5 @@ node_modules
 
 # Hardhat Ignition default folder for deployments against a local node
 ignition/deployments/chain-31337
+=======
+>>>>>>> f0f14871f8a2343540925144f6beeb437593db4e
