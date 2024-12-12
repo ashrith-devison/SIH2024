@@ -130,10 +130,12 @@ router.get('/checks/:hash/:sender/:receiver', async (req, res) => {
     const resHash = await axios.get(`${process.env.BACKEND_URL}/api/spam/${hash}`);
     const resSender = await axios.get(`${process.env.BACKEND_URL}/api/history/l2/${sender}/${receiver}`);
     const ip = await axios.get(`${process.env.BACKEND_URL}/api/history/l3`);
+    const level4 = await axios.get(`${process.env.BACKEND_URL}/api/history/l4/${sender}/${receiver}`);
     res.json({ 
         level1 : resHash.data,
         level2 : resSender.data,
-        level3 : ip.data
+        level3 : ip.data,
+        level4 : level4.data,
     });
 });
 
