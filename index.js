@@ -1,11 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import Web3 from 'web3';
-<<<<<<< HEAD
 const web3 = new Web3("http://172.16.56.124:8545");
-=======
-const web3 = new Web3("http://127.0.0.1:8545");
->>>>>>> f0f14871f8a2343540925144f6beeb437593db4e
 
 const testConnection = async () => {
   try {
@@ -18,7 +14,6 @@ const testConnection = async () => {
   }
 };
 
-<<<<<<< HEAD
 const closeConnection = async () => {
   try {
       const resp = await testConnection();
@@ -34,8 +29,6 @@ const closeConnection = async () => {
   }
 };
 
-=======
->>>>>>> f0f14871f8a2343540925144f6beeb437593db4e
 const app = express();
 app.use(cors({
   origin : '*',
@@ -54,7 +47,6 @@ testConnection().then((resp) => {
   }
 } )
 
-<<<<<<< HEAD
 app.get('/disconnect', async (req, res) => {
   await closeConnection().then((resp) => {
     console.log(resp);
@@ -62,7 +54,5 @@ app.get('/disconnect', async (req, res) => {
   });
 });
 
-=======
->>>>>>> f0f14871f8a2343540925144f6beeb437593db4e
 import routes_transactions from './routes/transactions.routes.js';
 app.use('/api', routes_transactions);
